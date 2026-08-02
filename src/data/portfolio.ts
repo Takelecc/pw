@@ -6,7 +6,7 @@ export const personalInfo = {
   phone: "+251902002565",
   location: "Addis Ababa, Ethiopia",
   // set to a local path (e.g. "/profile.jpg") or external URL
-  photo: "https://raw.githubusercontent.com/Takelecc/Resume/main/1720695154770.jfif",
+  photo: "https://raw.githubusercontent.com/Takelecc/Photo/main/Takele%20Po.png",
   bio: "I'm a passionate developer who loves turning ideas into elegant, functional products. With a focus on user experience and performance, I craft web applications that make a difference.",
   social: {
     github: "https://github.com/takelecc",

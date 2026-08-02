@@ -1,8 +1,19 @@
 @import "tailwindcss";
 
-@theme {
+:root {
   --font-display: "Syne", sans-serif;
   --font-body: "DM Sans", sans-serif;
+  --color-surface: #fafafa;
+  --color-surface-raised: #ffffff;
+  --color-surface-border: #e6e6e6;
+  --color-accent: #10b981;
+  --color-accent-dim: #059669;
+  --color-muted: #4b5563;
+  --color-text: #0b1220;
+  --brightness: 1;
+}
+
+[data-theme="dark"] {
   --color-surface: #0a0a0f;
   --color-surface-raised: #12121a;
   --color-surface-border: #1e1e2e;
@@ -20,6 +31,8 @@ body {
   font-family: var(--font-body);
   background-color: var(--color-surface);
   color: var(--color-text);
+  filter: brightness(var(--brightness));
+  transition: background-color 200ms ease, color 200ms ease, filter 200ms ease;
 }
 
 ::selection {

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { personalInfo, navLinks } from "../data/portfolio";
+import { useTheme } from "../theme";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { theme, toggleTheme, brightness, setBrightness } = useTheme();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-surface-border/50 bg-surface/80 backdrop-blur-md">
@@ -33,6 +35,25 @@ export default function Navbar() {
             >
               Resume
             </a>
+          </li>
+          <li className="flex items-center gap-3">
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              className="rounded px-2 py-1 text-sm text-muted hover:text-accent"
+            >
+              {theme === "dark" ? "🌙" : "☀️"}
+            </button>
+            <input
+              type="range"
+              min="0.6"
+              max="1.2"
+              step="0.01"
+              value={brightness}
+              onChange={(e) => setBrightness(Number(e.target.value))}
+              aria-label="Brightness"
+              className="h-1 w-24 cursor-pointer accent-accent"
+            />
           </li>
         </ul>
 
@@ -75,6 +96,25 @@ export default function Navbar() {
               >
                 Resume
               </a>
+            </li>
+            <li className="flex items-center gap-3 pt-2">
+              <button
+                onClick={() => { toggleTheme(); setOpen(false); }}
+                aria-label="Toggle theme"
+                className="rounded px-2 py-1 text-sm text-muted hover:text-accent"
+              >
+                {theme === "dark" ? "🌙" : "☀️"}
+              </button>
+              <input
+                type="range"
+                min="0.6"
+                max="1.2"
+                step="0.01"
+                value={brightness}
+                onChange={(e) => setBrightness(Number(e.target.value))}
+                aria-label="Brightness"
+                className="h-1 w-full cursor-pointer accent-accent"
+              />
             </li>
           </ul>
         </div>
