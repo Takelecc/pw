@@ -1,36 +1,38 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import emailjs from "@emailjs/browser";
 import { personalInfo } from "../data/portfolio";
+
+// ✅ Correct: Initialize with public key (safe - it's meant to be public)
+emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget as HTMLFormElement & { _gotcha?: { value: string } };
+    
     // honeypot spam check
     if (form._gotcha && form._gotcha.value) {
       return;
     }
 
-    const body = {
-      name: (form.elements.namedItem("name") as HTMLInputElement).value,
-      email: (form.elements.namedItem("email") as HTMLInputElement).value,
-      message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
-    };
+    if (!formRef.current) return;
 
-    fetch("/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    })
-      .then((res) => {
-        if (res.ok) setSubmitted(true);
-        else res.json().then((d) => { console.error(d); alert("Failed to send message"); });
-      })
-      .catch((err) => {
-        console.error(err);
-        alert("Failed to send message");
-      });
+    try {
+      // ✅ Correct: Using VITE_ prefix for Vite environment variables
+      await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+      setSubmitted(true);
+    } catch (err) {
+      console.error("EmailJS error:", err);
+      alert("Failed to send message");
+    }
   }
 
   return (
@@ -46,7 +48,7 @@ export default function Contact() {
         </p>
 
         <div className="mt-10 grid gap-10 md:grid-cols-2">
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
             <input type="text" name="_gotcha" style={{ display: "none" }} />
             <div>
               <label htmlFor="name" className="mb-1.5 block text-sm text-muted">
